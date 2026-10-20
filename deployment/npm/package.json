@@ -1,0 +1,31 @@
+{
+  "name": "@dprint/stylua",
+  "version": "0.0.0",
+  "description": "Wasm buffer for dprint-plugin-stylua.",
+  "main": "./index.js",
+  "types": "./index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dprint/dprint-plugin-stylua.git"
+  },
+  "keywords": [
+    "lua",
+    "luau",
+    "stylua",
+    "code",
+    "formatter",
+    "dprint"
+  ],
+  "author": "David Sherret",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/dprint/dprint-plugin-stylua/issues"
+  },
+  "homepage": "https://github.com/dprint/dprint-plugin-stylua#readme",
+  "scripts": {
+    "test": "node index.test.js"
+  },
+  "devDependencies": {
+    "@dprint/formatter": "~0.4.0"
+  }
+}

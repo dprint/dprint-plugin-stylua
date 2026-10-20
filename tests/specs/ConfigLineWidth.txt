@@ -1,0 +1,10 @@
+~~ lineWidth: 40 ~~
+== should use the line width ==
+local result = call(first_argument, second_argument, third)
+
+[expect]
+local result = call(
+	first_argument,
+	second_argument,
+	third
+)

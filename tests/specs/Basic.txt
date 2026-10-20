@@ -1,0 +1,61 @@
+== should format a simple file ==
+local   x   =    1
+local function add(a,b) return a+b end
+print( add( x , 2 ) )
+
+[expect]
+local x = 1
+local function add(a, b)
+	return a + b
+end
+print(add(x, 2))
+
+== should wrap long lines ==
+local result = some_function_with_a_long_name(first_argument_value, second_argument_value, third_argument_value, fourth_argument_value, fifth_argument_value)
+
+[expect]
+local result = some_function_with_a_long_name(
+	first_argument_value,
+	second_argument_value,
+	third_argument_value,
+	fourth_argument_value,
+	fifth_argument_value
+)
+
+== should format tables ==
+local t = {a=1,b=2,["c"]=3, nested={1,2,3}}
+
+[expect]
+local t = { a = 1, b = 2, ["c"] = 3, nested = { 1, 2, 3 } }
+
+== should keep comments ==
+-- leading comment
+local x = 1 -- trailing comment
+--[[ block
+comment ]]
+if x then  print('yes')  end
+
+[expect]
+-- leading comment
+local x = 1 -- trailing comment
+--[[ block
+comment ]]
+if x then
+	print("yes")
+end
+
+== should keep stylua ignore comments ==
+-- stylua: ignore
+local   matrix = {  1,0,  0,1 }
+local   y   =   2
+
+[expect]
+-- stylua: ignore
+local   matrix = {  1,0,  0,1 }
+local y = 2
+
+== should keep an already formatted file ==
+local x = 1
+
+[expect]
+local x = 1

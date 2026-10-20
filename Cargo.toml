@@ -1,0 +1,42 @@
+[package]
+name = "dprint-plugin-stylua"
+version = "0.1.0"
+authors = ["David Sherret <dsherret@gmail.com>"]
+edition = "2024"
+homepage = "https://github.com/dprint/dprint-plugin-stylua"
+keywords = ["formatting", "formatter", "lua", "luau", "stylua"]
+license = "MIT"
+repository = "https://github.com/dprint/dprint-plugin-stylua"
+description = "Lua and Luau formatter for dprint via StyLua."
+
+[lib]
+crate-type = ["lib", "cdylib"]
+
+[profile.release]
+opt-level = 3
+debug = false
+lto = true
+debug-assertions = false
+overflow-checks = false
+panic = "abort"
+
+[features]
+wasm = ["serde_json", "dprint-core/wasm"]
+
+[dependencies]
+dprint-core = { version = "0.71.0", default-features = false }
+serde = { version = "1.0.210", features = ["derive"] }
+serde_json = { version = "1.0", optional = true }
+stylua = { version = "2.6.0", default-features = false, features = [
+  "lua52",
+  "lua53",
+  "lua54",
+  "luau",
+  "luajit",
+  "cfxlua",
+] }
+thiserror = "2"
+
+[dev-dependencies]
+dprint-development = "0.12.1"
+serde_json = { version = "1.0" }

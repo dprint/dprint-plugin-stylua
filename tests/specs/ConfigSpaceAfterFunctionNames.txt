@@ -1,0 +1,12 @@
+~~ spaceAfterFunctionNames: always ~~
+== should add a space after function names ==
+local function f(a)
+return a
+end
+f(1)
+
+[expect]
+local function f (a)
+	return a
+end
+f (1)

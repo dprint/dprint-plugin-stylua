@@ -1,0 +1,12 @@
+~~ collapseSimpleStatement: always ~~
+== should collapse simple statements ==
+local function f()
+return 1
+end
+if not x then
+return
+end
+
+[expect]
+local function f() return 1 end
+if not x then return end

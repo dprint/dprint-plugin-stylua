@@ -1,0 +1,14 @@
+~~ useTabs: false, indentWidth: 2 ~~
+== should indent with spaces ==
+local function f()
+if true then
+return 1
+end
+end
+
+[expect]
+local function f()
+  if true then
+    return 1
+  end
+end

@@ -1,0 +1,14 @@
+~~ blockNewlineGaps: preserve ~~
+== should keep blank lines at the start and end of blocks ==
+local function f()
+
+	local x = 1
+
+end
+
+[expect]
+local function f()
+
+	local x = 1
+
+end

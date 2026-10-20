@@ -1,0 +1,16 @@
+~~ syntax: lua52 ~~
+== should format goto and labels ==
+for i=1,3 do
+if i==2 then goto continue end
+print(i)
+::continue::
+end
+
+[expect]
+for i = 1, 3 do
+	if i == 2 then
+		goto continue
+	end
+	print(i)
+	::continue::
+end

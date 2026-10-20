@@ -1,0 +1,10 @@
+~~ sortRequires: true ~~
+== should sort requires ==
+local zebra = require("zebra")
+local apple = require("apple")
+local mango = require("mango")
+
+[expect]
+local apple = require("apple")
+local mango = require("mango")
+local zebra = require("zebra")

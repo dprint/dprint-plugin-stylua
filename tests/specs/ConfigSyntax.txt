@@ -1,0 +1,10 @@
+~~ syntax: luau ~~
+== should format luau type annotations ==
+local function f(x:number,y:string):boolean return x>0 end
+type Point={x:number,y:number}
+
+[expect]
+local function f(x: number, y: string): boolean
+	return x > 0
+end
+type Point = { x: number, y: number }

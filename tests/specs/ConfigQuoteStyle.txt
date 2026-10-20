@@ -1,0 +1,10 @@
+~~ quoteStyle: forceSingle ~~
+== should use single quotes ==
+local a = "hello"
+local b = 'world'
+local c = "it's"
+
+[expect]
+local a = 'hello'
+local b = 'world'
+local c = 'it\'s'

@@ -1,0 +1,10 @@
+~~ callParentheses: none ~~
+== should omit parentheses ==
+require("module")
+setup({ enabled = true })
+print("a", "b")
+
+[expect]
+require "module"
+setup { enabled = true }
+print("a", "b")
