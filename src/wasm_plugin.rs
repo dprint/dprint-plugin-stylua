@@ -45,7 +45,7 @@ impl SyncPluginHandler<Configuration> for StyLuaPluginHandler {
       name: env!("CARGO_PKG_NAME").to_string(),
       version: version.clone(),
       config_key: "stylua".to_string(),
-      help_url: "https://github.com/dprint/dprint-plugin-stylua".to_string(),
+      help_url: "https://dprint.dev/plugins/stylua".to_string(),
       config_schema_url: format!(
         "https://plugins.dprint.dev/dprint/dprint-plugin-stylua/{}/schema.json",
         version
