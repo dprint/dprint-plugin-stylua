@@ -51,6 +51,7 @@ impl SyncPluginHandler<Configuration> for StyLuaPluginHandler {
         version
       ),
       update_url: Some("https://plugins.dprint.dev/dprint/dprint-plugin-stylua/latest.json".to_string()),
+      supports_range_formatting: Some(true),
     }
   }
 
