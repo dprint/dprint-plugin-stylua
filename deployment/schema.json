@@ -2,6 +2,66 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "https://plugins.dprint.dev/dprint/dprint-plugin-stylua/0.0.0/schema.json",
   "type": "object",
+  "x-playground": {
+    "input": [
+      "local json=require('json')",
+      "",
+      "local Inventory={}",
+      "Inventory.__index=Inventory",
+      "",
+      "function Inventory.new(items)",
+      "local self=setmetatable({},Inventory)",
+      "  self.items=items or {}",
+      "    return self",
+      "end",
+      "",
+      "function Inventory:add(name,count)",
+      "  if not name then return end",
+      "  self.items[name]=(self.items[name] or 0)+count",
+      "end",
+      "",
+      "function Inventory:total()",
+      "    local sum=0",
+      "    for _,count in pairs(self.items) do sum=sum+count end",
+      "    return sum",
+      "end",
+      "",
+      "local inventory=Inventory.new({apples=3,pears=2})",
+      "inventory:add('plums',5)",
+      "print(string.format('total: %d',inventory:total()),json.encode(inventory.items))"
+    ]
+  },
+  "x-sections": [
+    {
+      "title": "General",
+      "description": "The syntax, width, indentation, and newlines of all the code.",
+      "properties": [
+        "syntax",
+        "lineWidth",
+        "useTabs",
+        "indentWidth",
+        "newLineKind"
+      ]
+    },
+    {
+      "title": "Strings and calls",
+      "description": "The quotes of strings and the parentheses and spaces of function calls and definitions.",
+      "properties": [
+        "quoteStyle",
+        "callParentheses",
+        "spaceAfterFunctionNames"
+      ]
+    },
+    {
+      "title": "Statements and blocks",
+      "description": "When simple statements go on one line, the blank lines in blocks, and the order of `require` statements.",
+      "properties": [
+        "collapseSimpleStatement",
+        "blockNewlineGaps",
+        "sortRequires"
+      ]
+    }
+  ],
   "properties": {
     "syntax": {
       "description": "The Lua syntax to parse.",
@@ -36,17 +96,29 @@
     "lineWidth": {
       "description": "The width of a line the formatter will try to stay under. Note that this limit will be exceeded in some cases.",
       "default": 120,
-      "type": "number"
+      "type": "integer",
+      "minimum": 1
     },
     "useTabs": {
       "description": "Whether to indent with tabs instead of spaces.",
       "default": true,
-      "type": "boolean"
+      "type": "boolean",
+      "x-example": {
+        "input": [
+          "local function greet(name)",
+          "if name then",
+          "print(\"Hello, \" .. name)",
+          "end",
+          "end"
+        ]
+      }
     },
     "indentWidth": {
       "description": "The number of spaces for an indent. With tabs, this is the width of a tab when deciding where to wrap lines.",
       "default": 4,
-      "type": "number"
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 255
     },
     "newLineKind": {
       "description": "The kind of newline to use.",
@@ -79,7 +151,14 @@
       }, {
         "const": "forceSingle",
         "description": "Always uses single quotes."
-      }]
+      }],
+      "x-example": {
+        "input": [
+          "local greeting = 'Hello'",
+          "local quote = 'She said \"hi\"'",
+          "local reply = \"It's fine\""
+        ]
+      }
     },
     "callParentheses": {
       "description": "When to use parentheses around the arguments of a function call.",
@@ -100,7 +179,14 @@
       }, {
         "const": "input",
         "description": "Keeps the parentheses as they are in the input."
-      }]
+      }],
+      "x-example": {
+        "input": [
+          "local json = require(\"json\")",
+          "print \"ready\"",
+          "setup({ debug = true })"
+        ]
+      }
     },
     "collapseSimpleStatement": {
       "description": "Which simple statements to collapse onto a single line.",
@@ -117,11 +203,20 @@
         "description": "Collapses simple functions."
       }, {
         "const": "conditionalOnly",
-        "description": "Collapses simple if guards."
+        "description": "Collapses simple `if` guards."
       }, {
         "const": "always",
-        "description": "Collapses simple functions and if guards."
-      }]
+        "description": "Collapses simple functions and `if` guards."
+      }],
+      "x-example": {
+        "input": [
+          "local function double(x) return x * 2 end",
+          "local function half(x)",
+          "\treturn x / 2",
+          "end",
+          "if not ready then return end"
+        ]
+      }
     },
     "blockNewlineGaps": {
       "description": "Whether blocks keep the blank lines at their start and end.",
@@ -133,7 +228,17 @@
       }, {
         "const": "preserve",
         "description": "Keeps them when they are in the input."
-      }]
+      }],
+      "x-example": {
+        "input": [
+          "local function load(path)",
+          "",
+          "\tlocal file = io.open(path)",
+          "\treturn file:read(\"a\")",
+          "",
+          "end"
+        ]
+      }
     },
     "spaceAfterFunctionNames": {
       "description": "Where to put a space between a function name and its parameters or arguments.",
@@ -151,12 +256,27 @@
       }, {
         "const": "always",
         "description": "In function definitions and calls."
-      }]
+      }],
+      "x-example": {
+        "input": [
+          "local function add(a, b)",
+          "\treturn a + b",
+          "end",
+          "print(add(1, 2))"
+        ]
+      }
     },
     "sortRequires": {
-      "description": "Whether to sort consecutive require statements by their variable name.",
+      "description": "Whether to sort consecutive `require` statements by their variable name.",
       "default": false,
-      "type": "boolean"
+      "type": "boolean",
+      "x-example": {
+        "input": [
+          "local utils = require(\"utils\")",
+          "local config = require(\"config\")",
+          "local logger = require(\"logger\")"
+        ]
+      }
     }
   }
 }
