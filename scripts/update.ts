@@ -2,7 +2,7 @@
  * This script checks for any StyLua updates and then
  * automatically publishes a new version of the plugin if so.
  */
-import { $, CargoToml, semver } from "automation";
+import { $, CargoToml, getLatestCrateVersion, semver } from "automation";
 import { aiFixStyLuaUpdate } from "./ai_fix.ts";
 
 const crateName = "stylua";
@@ -11,7 +11,9 @@ const cargoToml = new CargoToml(rootDirPath.join("Cargo.toml"));
 const currentVersion = getStyLuaCargoTomlVersion(cargoToml.text());
 
 $.logStep("Getting latest version...");
-const latestVersion = await getLatestStyLuaVersion();
+const latestCrate = await getLatestCrateVersion(crateName);
+const latestVersion = latestCrate.version;
+$.logLight(`Latest ${crateName} version on crates.io:`, latestVersion);
 if (semver.compare(semver.parse(currentVersion), semver.parse(latestVersion)) >= 0) {
   $.log("No new update found. Exiting.");
   Deno.exit(0);
@@ -19,7 +21,7 @@ if (semver.compare(semver.parse(currentVersion), semver.parse(latestVersion)) >=
 
 $.log(`Found new version: ${currentVersion} -> ${latestVersion}`);
 $.logStep("Updating rust-toolchain.toml...");
-await updateRustToolchain(latestVersion);
+await updateRustToolchain(latestVersion, latestCrate.rustVersion);
 $.logStep("Updating Cargo.toml...");
 const isPatchBump = semver.parse(currentVersion).major === semver.parse(latestVersion).major
   && semver.parse(currentVersion).minor === semver.parse(latestVersion).minor;
@@ -131,19 +133,7 @@ function getStyLuaCargoTomlVersion(text: string) {
   return version;
 }
 
-async function getLatestStyLuaVersion() {
-  const data = await getCrateData(`https://crates.io/api/v1/crates/${crateName}`);
-  const version = data.crate?.max_stable_version;
-  if (version == null) {
-    throw new Error(`Could not find latest version of ${crateName} on crates.io.`);
-  }
-  $.logLight(`Latest ${crateName} version on crates.io:`, version);
-  return version;
-}
-
-async function updateRustToolchain(styLuaVersion: string) {
-  const data = await getCrateData(`https://crates.io/api/v1/crates/${crateName}/${styLuaVersion}`);
-  const requiredRustVersion = data.version?.rust_version;
+async function updateRustToolchain(styLuaVersion: string, requiredRustVersion: string | undefined) {
   if (requiredRustVersion == null) {
     $.log(`${crateName} ${styLuaVersion} does not declare a rust_version; leaving rust-toolchain.toml alone.`);
     return;
@@ -170,13 +160,4 @@ async function updateRustToolchain(styLuaVersion: string) {
       } already satisfies ${crateName} ${styLuaVersion} (needs >= ${requiredRustVersion}).`,
     );
   }
-}
-
-function getCrateData(url: string) {
-  return $.request(url)
-    .header("User-Agent", "dprint-plugin-stylua update script")
-    .json<{
-      crate?: { max_stable_version?: string };
-      version?: { rust_version?: string | null };
-    }>();
 }
